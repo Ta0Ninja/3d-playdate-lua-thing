@@ -9,13 +9,14 @@ import 'CoreLibs/crank'
 pd.setCrankSoundsDisabled(true)
 pd.display.setScale(2)
 --lists
-
-camera = {3,4,20}
+camera = {3,2,20}
+--listing all the corners (vertices/vertexes) of a shape
 cubeVertices =
 {
 {1,2,1},{-1, 2, 1},{1, -1,1},{-1, -1, 1},
-{1,2,-1},{-1, 2, -1},{1, -1,-1},{-1, -1, -1}
+{1,2,-1},{-1, 2, -1},{1, -1,-1},{-1, -1, -1},
 }
+--listing all the lines (edges) that connect the vertices
 cubeEdges =
 {
 {1, 2},{1, 3},{1,5},
@@ -24,12 +25,29 @@ cubeEdges =
 {4, 8},
 {5, 7},{5, 6},
 {6, 8},
-{7, 8}
+{7, 8},
+
 }
 --variables
-scale = 50
+angle = 23
 screenCenterX, screenCenterY = 100, 60
+--[[
+FOV is your zoom level
+usually you'll have a multiplier that
+stays the same and is used as a tuning value
+so 
+u = (x * fovFactor) / z
+v = (y * fovFactor) / z
+
+will have the correct effect
+--]]
 FOV = 3.5
+--[[
+"scale" is what im multiplying the finished x, y cordinte by, so it
+looks bigger on the playdate screen
+eg: 0.5, 0.25 --> 25, 12.5 
+]]--
+scale = 50
 
 --calculations
 for currentVertex = 1, #cubeVertices do
@@ -50,9 +68,10 @@ for currentVertex = 1, #cubeVertices do
         cubeVertices[currentVertex][currentAxis] = cubeVertices[currentVertex][currentAxis]*scale
     end
 end
---print
+--printing the cordinates on the screen of the vertices
 for currentVertex = 1, #cubeVertices do
     print(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2])
+    print()
 end
 
 --main loop
@@ -60,12 +79,13 @@ function pd.update()
     gfx.sprite.update()
     pd.timer.updateTimers()
     gfx.clear()
-	crankTicks = pd.getCrankTicks(7)
+	crankTicks = pd.getCrankTicks(12)
+    crankPosition = pd.getCrankPosition()
     --lists
     cubeVertices =
     {
     {1,1,1},{-1, 1, 1},{1, -1,1},{-1, -1, 1},
-    {1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1}
+    {1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1},
     }
     
     --doing the calculations every frame
@@ -73,6 +93,12 @@ function pd.update()
         for currentAxis = 1, 3 do
             cubeVertices[currentVertex][currentAxis] = cubeVertices[currentVertex][currentAxis]-camera[currentAxis]
         end
+        --experiment
+        angle = (crankPosition+0.02)/20
+        cubeVertices[currentVertex][1] = cubeVertices[currentVertex][1]*-math.cos(angle)
+        cubeVertices[currentVertex][2] = cubeVertices[currentVertex][2]*-math.sin(angle)
+        cubeVertices[currentVertex][3] = cubeVertices[currentVertex][3]*math.tan(angle)
+        --
         for currentAxis = 1, 2 do
             cubeVertices[currentVertex][currentAxis] = ((cubeVertices[currentVertex][currentAxis])*FOV)/(cubeVertices[currentVertex][3])
         end
@@ -91,27 +117,30 @@ function pd.update()
     for currentEdge = 1, #cubeEdges do
         gfx.drawLine(cubeVertices[cubeEdges[currentEdge][1]][1],cubeVertices[cubeEdges[currentEdge][1]][2],cubeVertices[cubeEdges[currentEdge][2]][1],cubeVertices[cubeEdges[currentEdge][2]][2])
     end
-
+    for currentVertex = 1, #cubeVertices do
+        print(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2])
+        print()
+    end
     --input
     if pd.buttonIsPressed(pd.kButtonLeft) then
-        camera[1]-=0.3
+        camera[1]+=0.3
     end
     if pd.buttonIsPressed(pd.kButtonRight) then
-        camera[1]+=0.3
+        camera[1]-=0.3
     end
 
     if pd.buttonIsPressed(pd.kButtonUp) then
-        camera[2]-=0.3
-    end
-    if pd.buttonIsPressed(pd.kButtonDown) then
-        camera[2]+=0.3
-    end
-
-    if crankTicks == -1 then
         camera[3]-=0.3
     end
-    if crankTicks == 1 then
+    if pd.buttonIsPressed(pd.kButtonDown) then
         camera[3]+=0.3
+    end
+
+    if pd.buttonIsPressed(pd.kButtonA) then
+        camera[2]+=0.3
+    end
+    if pd.buttonIsPressed(pd.kButtonB) then
+        camera[2]-=0.3
     end
 
 end
