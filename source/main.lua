@@ -117,10 +117,6 @@ function pd.update()
     for currentEdge = 1, #cubeEdges do
         gfx.drawLine(cubeVertices[cubeEdges[currentEdge][1]][1],cubeVertices[cubeEdges[currentEdge][1]][2],cubeVertices[cubeEdges[currentEdge][2]][1],cubeVertices[cubeEdges[currentEdge][2]][2])
     end
-    for currentVertex = 1, #cubeVertices do
-        print(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2])
-        print()
-    end
     --input
     if pd.buttonIsPressed(pd.kButtonLeft) then
         camera[1]+=0.3
