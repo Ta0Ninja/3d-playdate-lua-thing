@@ -87,6 +87,7 @@ function pd.update()
     {1,1,1},{-1, 1, 1},{1, -1,1},{-1, -1, 1},
     {1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1},
     }
+    variable = [[1,2]]
     
     --doing the calculations every frame
     for currentVertex = 1, #cubeVertices do
@@ -94,10 +95,10 @@ function pd.update()
             cubeVertices[currentVertex][currentAxis] = cubeVertices[currentVertex][currentAxis]-camera[currentAxis]
         end
         --experiment
-        angle = (crankPosition+0.02)/20
-        cubeVertices[currentVertex][1] = cubeVertices[currentVertex][1]*-math.cos(angle)
-        cubeVertices[currentVertex][2] = cubeVertices[currentVertex][2]*-math.sin(angle)
-        cubeVertices[currentVertex][3] = cubeVertices[currentVertex][3]*math.tan(angle)
+        angle = (crankPosition+0.02)/60
+        cubeVertices[currentVertex][1] = cubeVertices[currentVertex][1]+math.cos(angle+90)
+        cubeVertices[currentVertex][2] = cubeVertices[currentVertex][2]+math.sin(angle+90)
+
         --
         for currentAxis = 1, 2 do
             cubeVertices[currentVertex][currentAxis] = ((cubeVertices[currentVertex][currentAxis])*FOV)/(cubeVertices[currentVertex][3])
