@@ -13,8 +13,8 @@ camera = {3,2,20}
 --listing all the corners (vertices/vertexes) of a shape
 cubeVertices =
 {
-{1,2,1},{-1, 2, 1},{1, -1,1},{-1, -1, 1},
-{1,2,-1},{-1, 2, -1},{1, -1,-1},{-1, -1, -1},
+{1,1,1},{-1, 1, 1},{1, -1,1},{-1, -1, 1},
+{1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1},
 }
 --listing all the lines (edges) that connect the vertices
 cubeEdges =
@@ -30,6 +30,7 @@ cubeEdges =
 }
 --variables
 angle = 23
+rotation = 0
 screenCenterX, screenCenterY = 100, 60
 --[[
 FOV is your zoom level
@@ -48,7 +49,7 @@ looks bigger on the playdate screen
 eg: 0.5, 0.25 --> 25, 12.5 
 ]]--
 scale = 50
-
+import 'functions'
 --calculations
 for currentVertex = 1, #cubeVertices do
     for currentAxis = 1, 3 do
@@ -87,7 +88,10 @@ function pd.update()
     {1,1,1},{-1, 1, 1},{1, -1,1},{-1, -1, 1},
     {1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1},
     }
-    variable = [[1,2]]
+    rotation = (pd.getCrankPosition())/60
+    for currentVertex =1, #cubeVertices do
+        rotatePoint(cubeVertices[currentVertex],0,rotation,rotation-43)
+    end
     
     --doing the calculations every frame
     for currentVertex = 1, #cubeVertices do
@@ -109,6 +113,7 @@ function pd.update()
         cubeVertices[currentVertex][1] = screenCenterX+(cubeVertices[currentVertex][1]*scale)
         cubeVertices[currentVertex][2] = screenCenterY+(cubeVertices[currentVertex][2]*scale)
     end
+    
     --drawing dots
     for currentVertex = 1, #cubeVertices do
         gfx.fillCircleAtPoint(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2],2)
