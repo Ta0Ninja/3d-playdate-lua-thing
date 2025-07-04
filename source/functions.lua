@@ -2,7 +2,6 @@ local pd <const> = playdate
 local gfx <const> = pd.graphics
 
 function rotatePoint(vertex, rx, ry, rz)
-    
     local cosX, sinX = math.cos(rx), math.sin(rx)
     local y1 = vertex[2] * cosX - vertex[3] * sinX
     local z1 = vertex[2] * sinX + vertex[3] * cosX

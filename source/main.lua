@@ -10,6 +10,7 @@ pd.setCrankSoundsDisabled(true)
 pd.display.setScale(2)
 --lists
 camera = {3,2,20}
+cameraRotation = {0,0,0}
 --listing all the corners (vertices/vertexes) of a shape
 cubeVertices =
 {
@@ -31,7 +32,9 @@ cubeEdges =
 --variables
 angle = 23
 rotation = 0
-screenCenterX, screenCenterY = 100, 60
+screenScale = playdate.display.getScale()
+screenWidth, screenHeight = 400/screenScale, 240/screenScale
+screenCenterX, screenCenterY = screenWidth/2, screenHeight/2
 --[[
 FOV is your zoom level
 usually you'll have a multiplier that
@@ -50,31 +53,6 @@ eg: 0.5, 0.25 --> 25, 12.5
 ]]--
 scale = 50
 import 'functions'
---calculations
-for currentVertex = 1, #cubeVertices do
-    for currentAxis = 1, 3 do
-        --[[minusing the camera position from each vertex to get
-        the relative vertex from the camera]]--
-        cubeVertices[currentVertex][currentAxis] = cubeVertices[currentVertex][currentAxis]-camera[currentAxis]
-    end
-    for currentAxis = 1, 2 do
-        --multiplying each vertex by the FOV before dividing the X Y by the Z
-        --this gives you the 2d positions of the vertices
-        cubeVertices[currentVertex][currentAxis] = ((cubeVertices[currentVertex][currentAxis])*FOV)/(cubeVertices[currentVertex][3])
-    end
-end
-for currentVertex = 1, #cubeVertices do
-    for currentAxis = 1, 2 do
-        --making each vertice bigger (so it isnt like a 3x3 pixel cube)
-        cubeVertices[currentVertex][currentAxis] = cubeVertices[currentVertex][currentAxis]*scale
-    end
-end
---printing the cordinates on the screen of the vertices
-for currentVertex = 1, #cubeVertices do
-    print(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2])
-    print()
-end
-
 --main loop
 function pd.update()
     gfx.sprite.update()
@@ -82,32 +60,33 @@ function pd.update()
     gfx.clear()
 	crankTicks = pd.getCrankTicks(12)
     crankPosition = pd.getCrankPosition()
+    rotation = crankPosition/60
     --lists
     cubeVertices =
     {
     {1,1,1},{-1, 1, 1},{1, -1,1},{-1, -1, 1},
     {1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1},
     }
-    rotation = (pd.getCrankPosition())/60
+    --rotations
     for currentVertex =1, #cubeVertices do
-        rotatePoint(cubeVertices[currentVertex],0,rotation,rotation-43)
+        rotatePoint(cubeVertices[currentVertex],0,rotation, 0)
     end
-    
-    --doing the calculations every frame
-    for currentVertex = 1, #cubeVertices do
+    --geting relitive camera coordinets
+    for currentVertex =1, #cubeVertices do
         for currentAxis = 1, 3 do
             cubeVertices[currentVertex][currentAxis] = cubeVertices[currentVertex][currentAxis]-camera[currentAxis]
         end
-        --experiment
-        angle = (crankPosition+0.02)/60
-        cubeVertices[currentVertex][1] = cubeVertices[currentVertex][1]+math.cos(angle+90)
-        cubeVertices[currentVertex][2] = cubeVertices[currentVertex][2]+math.sin(angle+90)
-
+    end
+    --camera rotation
+    for currentVertex =1, #cubeVertices do
+        rotatePoint(cubeVertices[currentVertex],-cameraRotation[3],-cameraRotation[2], -cameraRotation[1])
+    end
+    --doing the calculations every frame
+    for currentVertex = 1, #cubeVertices do
         --
         for currentAxis = 1, 2 do
             cubeVertices[currentVertex][currentAxis] = ((cubeVertices[currentVertex][currentAxis])*FOV)/(cubeVertices[currentVertex][3])
         end
-        table.remove(cubeVertices[currentVertex], 3)
     end
     for currentVertex = 1, #cubeVertices do
         cubeVertices[currentVertex][1] = screenCenterX+(cubeVertices[currentVertex][1]*scale)
@@ -116,12 +95,19 @@ function pd.update()
     
     --drawing dots
     for currentVertex = 1, #cubeVertices do
-        gfx.fillCircleAtPoint(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2],2)
+        if (cubeVertices[currentVertex][1] <= screenWidth or cubeVertices[currentVertex][1] >= 0) or (cubeVertices[currentVertex][2] <= screenHeight or cubeVertices[currentVertex][2] >= 0) then
+            if cubeVertices[currentVertex][3] < 0 then
+                gfx.fillCircleAtPoint(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2],2)
+            end
+        end
     end
 
     --draw lines
     for currentEdge = 1, #cubeEdges do
-        gfx.drawLine(cubeVertices[cubeEdges[currentEdge][1]][1],cubeVertices[cubeEdges[currentEdge][1]][2],cubeVertices[cubeEdges[currentEdge][2]][1],cubeVertices[cubeEdges[currentEdge][2]][2])
+        if (cubeVertices[cubeEdges[currentEdge][1]][3] < 0) then
+            gfx.drawLine(cubeVertices[cubeEdges[currentEdge][1]][1],cubeVertices[cubeEdges[currentEdge][1]][2],cubeVertices[cubeEdges[currentEdge][2]][1],cubeVertices[cubeEdges[currentEdge][2]][2])
+        
+        end
     end
     --input
     if pd.buttonIsPressed(pd.kButtonLeft) then
@@ -139,10 +125,17 @@ function pd.update()
     end
 
     if pd.buttonIsPressed(pd.kButtonA) then
-        camera[2]+=0.3
+        --camera[2]+=0.3
+        cameraRotation[2]+=0.04
     end
     if pd.buttonIsPressed(pd.kButtonB) then
-        camera[2]-=0.3
+        --camera[2]-=0.3
+        cameraRotation[2]-=0.04
     end
-
+    --[[
+    for currentAxis =1, 3 do
+        print(cubeVertices[1][currentAxis])
+    end
+    print()
+    --]]
 end
