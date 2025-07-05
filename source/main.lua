@@ -16,6 +16,9 @@ cubeVertices =
 {
 {1,1,1},{-1, 1, 1},{1, -1,1},{-1, -1, 1},
 {1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1},
+    
+{4,4,4},{2, 4, 4},{4, 2,4},{2, 2, 4},
+{4,4,2},{2, 4, 2},{4, 2,2},{2, 2, 2},
 }
 --listing all the lines (edges) that connect the vertices
 cubeEdges =
@@ -27,6 +30,14 @@ cubeEdges =
 {5, 7},{5, 6},
 {6, 8},
 {7, 8},
+
+{9, 10},{9, 11},{9,13},
+{10, 12},{10,14},
+{11, 12},{11, 15},
+{12, 16},
+{13, 15},{13, 14},
+{14, 16},
+{15, 16},
 
 }
 --variables
@@ -66,6 +77,9 @@ function pd.update()
     {
     {1,1,1},{-1, 1, 1},{1, -1,1},{-1, -1, 1},
     {1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1},
+
+    {4,4,4},{2, 4, 4},{4, 2,4},{2, 2, 4},
+    {4,4,2},{2, 4, 2},{4, 2,2},{2, 2, 2},
     }
     --rotations
     for currentVertex =1, #cubeVertices do
@@ -92,36 +106,27 @@ function pd.update()
         cubeVertices[currentVertex][1] = screenCenterX+(cubeVertices[currentVertex][1]*scale)
         cubeVertices[currentVertex][2] = screenCenterY+(cubeVertices[currentVertex][2]*scale)
     end
-    
-    --drawing dots
-    for currentVertex = 1, #cubeVertices do
-        if (cubeVertices[currentVertex][1] <= screenWidth or cubeVertices[currentVertex][1] >= 0) or (cubeVertices[currentVertex][2] <= screenHeight or cubeVertices[currentVertex][2] >= 0) then
-            if cubeVertices[currentVertex][3] < 0 then
-                gfx.fillCircleAtPoint(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2],2)
-            end
-        end
-    end
-
-    --draw lines
-    for currentEdge = 1, #cubeEdges do
-        if (cubeVertices[cubeEdges[currentEdge][1]][3] < 0) then
-            gfx.drawLine(cubeVertices[cubeEdges[currentEdge][1]][1],cubeVertices[cubeEdges[currentEdge][1]][2],cubeVertices[cubeEdges[currentEdge][2]][1],cubeVertices[cubeEdges[currentEdge][2]][2])
-        
-        end
-    end
+    --drawing lines and dots on screen
+    drawStuff()
     --input
+    local angleX = (math.cos(cameraRotation[2]))/3
+    local angleY = (math.sin(cameraRotation[2]))/3
     if pd.buttonIsPressed(pd.kButtonLeft) then
-        camera[1]+=0.3
+        camera[3]-=angleY
+        camera[1]+=angleX
     end
     if pd.buttonIsPressed(pd.kButtonRight) then
-        camera[1]-=0.3
+        camera[3]+=angleY
+        camera[1]-=angleX
     end
 
     if pd.buttonIsPressed(pd.kButtonUp) then
-        camera[3]-=0.3
+        camera[3]-=angleX
+        camera[1]-=angleY
     end
     if pd.buttonIsPressed(pd.kButtonDown) then
-        camera[3]+=0.3
+        camera[3]+=angleX
+        camera[1]+=angleY
     end
 
     if pd.buttonIsPressed(pd.kButtonA) then
@@ -132,10 +137,5 @@ function pd.update()
         --camera[2]-=0.3
         cameraRotation[2]-=0.04
     end
-    --[[
-    for currentAxis =1, 3 do
-        print(cubeVertices[1][currentAxis])
-    end
-    print()
-    --]]
+    
 end
