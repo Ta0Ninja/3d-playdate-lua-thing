@@ -64,6 +64,7 @@ eg: 0.5, 0.25 --> 25, 12.5
 ]]--
 scale = 50
 import 'functions'
+import 'math'
 --main loop
 function pd.update()
     gfx.sprite.update()
@@ -72,42 +73,7 @@ function pd.update()
 	crankTicks = pd.getCrankTicks(12)
     crankPosition = pd.getCrankPosition()
     rotation = crankPosition/60
-    --lists
-    cubeVertices =
-    {
-    {1,1,1},{-1, 1, 1},{1, -1,1},{-1, -1, 1},
-    {1,1,-1},{-1, 1, -1},{1, -1,-1},{-1, -1, -1},
-
-    {4,4,4},{2, 4, 4},{4, 2,4},{2, 2, 4},
-    {4,4,2},{2, 4, 2},{4, 2,2},{2, 2, 2},
-    }
-    --rotations
-    for currentVertex =1, #cubeVertices do
-        rotatePoint(cubeVertices[currentVertex],0,rotation, 0)
-    end
-    --geting relitive camera coordinets
-    for currentVertex =1, #cubeVertices do
-        for currentAxis = 1, 3 do
-            cubeVertices[currentVertex][currentAxis] = cubeVertices[currentVertex][currentAxis]-camera[currentAxis]
-        end
-    end
-    --camera rotation
-    for currentVertex =1, #cubeVertices do
-        rotatePoint(cubeVertices[currentVertex],-cameraRotation[3],-cameraRotation[2], -cameraRotation[1])
-    end
-    --doing the calculations every frame
-    for currentVertex = 1, #cubeVertices do
-        --
-        for currentAxis = 1, 2 do
-            cubeVertices[currentVertex][currentAxis] = ((cubeVertices[currentVertex][currentAxis])*FOV)/(cubeVertices[currentVertex][3])
-        end
-    end
-    for currentVertex = 1, #cubeVertices do
-        cubeVertices[currentVertex][1] = screenCenterX+(cubeVertices[currentVertex][1]*scale)
-        cubeVertices[currentVertex][2] = screenCenterY+(cubeVertices[currentVertex][2]*scale)
-    end
-    --drawing lines and dots on screen
-    drawStuff()
+    maths()
     --input
     local angleX = (math.cos(cameraRotation[2]))/3
     local angleY = (math.sin(cameraRotation[2]))/3
@@ -131,11 +97,11 @@ function pd.update()
 
     if pd.buttonIsPressed(pd.kButtonA) then
         --camera[2]+=0.3
-        cameraRotation[2]+=0.04
+        cameraRotation[2]+=0.03
     end
     if pd.buttonIsPressed(pd.kButtonB) then
         --camera[2]-=0.3
-        cameraRotation[2]-=0.04
+        cameraRotation[2]-=0.03
     end
     
 end
