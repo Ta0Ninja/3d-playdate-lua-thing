@@ -67,13 +67,16 @@ import 'functions'
 import 'math'
 --main loop
 function pd.update()
+    crankTicks = pd.getCrankTicks(12)
+    crankPosition = pd.getCrankPosition()
+    rotation = crankPosition/60
+    cameraRotation[2] = rotation
     gfx.sprite.update()
     pd.timer.updateTimers()
     gfx.clear()
-	crankTicks = pd.getCrankTicks(12)
-    crankPosition = pd.getCrankPosition()
-    rotation = crankPosition/60
+    
     maths()
+
     --input
     local angleX = (math.cos(cameraRotation[2]))/3
     local angleY = (math.sin(cameraRotation[2]))/3
@@ -94,14 +97,4 @@ function pd.update()
         camera[3]+=angleX
         camera[1]+=angleY
     end
-
-    if pd.buttonIsPressed(pd.kButtonA) then
-        --camera[2]+=0.3
-        cameraRotation[2]+=0.03
-    end
-    if pd.buttonIsPressed(pd.kButtonB) then
-        --camera[2]-=0.3
-        cameraRotation[2]-=0.03
-    end
-    
 end

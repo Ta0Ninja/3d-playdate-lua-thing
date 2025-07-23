@@ -1,6 +1,6 @@
 local pd <const> = playdate
 local gfx <const> = pd.graphics
-
+--
 function rotatePoint(vertex, rx, ry, rz)
     local cosX, sinX = math.cos(rx), math.sin(rx)
     local y1 = vertex[2] * cosX - vertex[3] * sinX
@@ -18,6 +18,7 @@ function rotatePoint(vertex, rx, ry, rz)
     vertex[2] = y3
     vertex[3] = z2
 end
+--
 function drawStuff()
     --drawing dots
     for currentVertex = 1, #cubeVertices do
@@ -35,7 +36,4 @@ function drawStuff()
         
         end
     end
-end
-function rotateStuff(inputVertex)
-    rotatePoint(cubeVertices[inputVertex],0,rotation, 0)
 end

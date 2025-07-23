@@ -12,9 +12,8 @@ function maths()
     {4,4,2},{2, 4, 2},{4, 2,2},{2, 2, 2},
     }
     --rotations
-    for currentVertex =1, #cubeVertices do
-        rotateStuff(currentVertex)
-    end
+    --[put rotations here]
+    
     --geting relitive camera coordinets
     for currentVertex =1, #cubeVertices do
         for currentAxis = 1, 3 do
