@@ -20,20 +20,24 @@ function rotatePoint(vertex, rx, ry, rz)
 end
 --
 function drawStuff()
-    --drawing dots
-    for currentVertex = 1, #cubeVertices do
-        if (cubeVertices[currentVertex][1] <= screenWidth or cubeVertices[currentVertex][1] >= 0) or (cubeVertices[currentVertex][2] <= screenHeight or cubeVertices[currentVertex][2] >= 0) then
-            if cubeVertices[currentVertex][3] < 0 then
-                gfx.fillCircleAtPoint(cubeVertices[currentVertex][1],cubeVertices[currentVertex][2],2)
+    for currentObject =1, #objects do
+        local objectVertices <const> = calculationObjects[currentObject].vertices
+        local objectEdges <const> = calculationObjects[currentObject].edges
+        --drawing dots
+        for currentVertex = 1, #objectVertices do
+            if (objectVertices[currentVertex][1] <= screenWidth or objectVertices[currentVertex][1] >= 0) or (objectVertices[currentVertex][2] <= screenHeight or objectVertices[currentVertex][2] >= 0) then
+                if objectVertices[currentVertex][3] < 0 then
+                    gfx.fillCircleAtPoint(objectVertices[currentVertex][1],objectVertices[currentVertex][2],2)
+                end
             end
         end
-    end
 
-    --draw lines
-    for currentEdge = 1, #cubeEdges do
-        if (cubeVertices[cubeEdges[currentEdge][1]][3] < 0) then
-            gfx.drawLine(cubeVertices[cubeEdges[currentEdge][1]][1],cubeVertices[cubeEdges[currentEdge][1]][2],cubeVertices[cubeEdges[currentEdge][2]][1],cubeVertices[cubeEdges[currentEdge][2]][2])
-        
+        --draw lines
+        for currentEdge = 1, #objectEdges do
+            if (objectVertices[objectEdges[currentEdge][1]][3] < 0) then
+                gfx.drawLine(objectVertices[objectEdges[currentEdge][1]][1],objectVertices[objectEdges[currentEdge][1]][2],objectVertices[objectEdges[currentEdge][2]][1],objectVertices[objectEdges[currentEdge][2]][2])
+            
+            end
         end
     end
 end
