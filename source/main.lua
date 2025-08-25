@@ -49,7 +49,20 @@ objects =
     {7, 8}
     }
     },
-
+    {
+    name = "sloep ;'/",
+    vertices = {
+    {5, 1, 4},{7, -1,4},{5, -1, 4},
+    {5, 1, 2},{7, -1,2},{5, -1, 2}
+    },
+    edges = {
+    {1, 4}, {1, 3}, {1, 2},
+    {2, 3}, {2, 5},
+    {3, 6},
+    {4, 5},{4, 6},
+    {5, 6}
+    }
+    },
 }
 --making a copy of objects that calculations are done on =^}'
 calculationObjects = table.deepcopy(objects)
