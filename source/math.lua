@@ -4,6 +4,7 @@ local gfx <const> = pd.graphics
 function maths()
     --lists
     calculationObjects =table.deepcopy(objects)
+    ObjectList = {}
     --rotations
     --[put rotations here]
     
@@ -39,7 +40,10 @@ function maths()
         end
         objectImage.point[1] = screenCenterX+(objectImage.point[1]*scale)
         objectImage.point[2] = screenCenterY+(objectImage.point[2]*scale)
+
     end
+    --checking z index
+    
     --drawing lines and dots on screen
     drawShapes()
     drawImages()

@@ -50,6 +50,18 @@ function drawShapes()
 
     end
 end
+function drawImage(objectNumber)
+    local objectImage <const> = calculationObjects.images[objectNumber]
+    ZCalculation = (((objectImage.point[3]+14)/scale)+1)*2
+    if objectImage.point[3] < 0 then
+        if ZCalculation >= 0 then
+            scaleImage = objectImage.image:scaledImage(ZCalculation)
+            scaleImage:drawCentered(objectImage.point[1],objectImage.point[2])
+            gfx.drawCircleAtPoint(objectImage.point[1], objectImage.point[2], 2)
+        end
+    end
+end
+--draws all the images at once
 function drawImages()
     for currentObject =1, #objects.images do
         --draw
@@ -62,6 +74,26 @@ function drawImages()
                 gfx.drawCircleAtPoint(objectImage.point[1], objectImage.point[2], 2)
             end
         end
-        print(ZCalculation)
     end
+end
+
+function insertOrdered(array, number)
+    array[#array+1] = number
+    for i = 1, #array do
+		for j = 1, #array - i do
+			if array[j] > array[j + 1] then
+				array[j], array[j + 1] = array[j + 1], array[j]
+			end
+		end
+	end
+    print('[array]')
+    for i =1, #array do
+        print(array[i])
+    end
+    print('--')
+    for i = 1, #array do
+		if array[i]==number then
+            return i
+        end
+	end
 end

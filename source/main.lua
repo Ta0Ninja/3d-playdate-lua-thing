@@ -11,8 +11,10 @@ pd.display.setScale(2)
 --lists
 camera = {3,2,20}
 cameraRotation = {0,0,0}
+spareTable = {1,2, 4,5}
 --image
 imagePath = gfx.image.new('images/buglo')
+imagewidth, imageheight = imagePath:getSize()
 --objetcs =')
 
 objects =
@@ -142,12 +144,18 @@ function pd.update()
     if pd.buttonIsPressed(pd.kButtonB) then
         camera[2]-=0.3
     end
-    circlePoint += 1
+    if pd.buttonJustPressed(pd.kButtonB) then
+        local numberreturned = insertOrdered(spareTable, 1.5)
+        print(numberreturned)
+    end
+    --
+    circlePoint += 0.1
     if circlePoint == 360 then
         circlePoint = 0
     elseif circlePoint == -1 then
         circlePoint = 359
     end
+    --objects.images[1].point[1]+=math.cos(circlePoint)
     objects.images[1].point[1]+=math.cos(circlePoint)
     objects.images[1].point[3]+=math.sin(circlePoint)
 end

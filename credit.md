@@ -10,3 +10,5 @@ for genrally helping me with 3d stuff
 -a person called oliver
 
 -kitsunies (for the list functions)
+
+-Dervex for list functions
