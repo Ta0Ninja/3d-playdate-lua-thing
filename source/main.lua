@@ -11,9 +11,9 @@ pd.display.setScale(2)
 --lists
 camera = {3,2,20}
 cameraRotation = {0,0,0}
-spareTable = {1,2, 4,5}
---image
-imagePath = gfx.image.new('images/buglo')
+spareTable = {4, 5,2,1}
+--images
+imagePath = gfx.image.new('images/seal')
 imagewidth, imageheight = imagePath:getSize()
 --objetcs =')
 
@@ -59,7 +59,8 @@ objects =
         {
         name = "image ['w']",
         image = imagePath,
-        point = {1,1,6}
+        point = {1,1,6},
+        scale = 0.8
         },
     },
 }
@@ -92,8 +93,6 @@ eg: 0.5, 0.25 --> 25, 12.5
 scale = 50
 import 'functions'
 import 'math'
---images
-
 --setup ;^}
 addObject("sloep ;'/",
     {

@@ -11,6 +11,7 @@ function maths()
     --geting relitive camera coordinets
     for currentObject =1, #objects.shapes do
         local objectVertices <const> = calculationObjects.shapes[currentObject].vertices
+        local origObjectVertices <const> = objects.shapes[currentObject].vertices
         for currentVertex =1, #objectVertices do
             for currentAxis = 1, 3 do
                 objectVertices[currentVertex][currentAxis] = objectVertices[currentVertex][currentAxis]-camera[currentAxis]
