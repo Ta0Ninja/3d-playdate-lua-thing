@@ -60,7 +60,7 @@ objects =
         name = "image ['w']",
         image = imagePath,
         point = {1,1,6},
-        scale = 0.8
+        scale = 0.5
         },
     },
 }
