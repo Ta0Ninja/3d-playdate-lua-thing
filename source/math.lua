@@ -4,7 +4,6 @@ local gfx <const> = pd.graphics
 function maths()
     --lists
     calculationObjects =table.deepcopy(objects)
-    ObjectList = {}
     --rotations
     --[put rotations here]
     
@@ -28,7 +27,9 @@ function maths()
         
     end
     --image point maths
+    imageList= {}
     for currentObject = 1, #objects.images do
+
         local objectImage <const> = calculationObjects.images[currentObject]
         for currentAxis = 1, 3 do
             objectImage.point[currentAxis] = objectImage.point[currentAxis]-camera[currentAxis]
@@ -41,11 +42,14 @@ function maths()
         end
         objectImage.point[1] = screenCenterX+(objectImage.point[1]*scale)
         objectImage.point[2] = screenCenterY+(objectImage.point[2]*scale)
+        imageList[#imageList+1] = objectImage.point[3]
 
     end
     --checking z index
-    
+    imageList = OrderObjects(imageList)
     --drawing lines and dots on screen
     drawShapes()
-    drawImages()
+    for i =1, #imageList do
+        drawImage(imageList[i])
+    end
 end

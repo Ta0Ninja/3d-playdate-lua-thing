@@ -20,7 +20,7 @@ function rotatePoint(vertex, rx, ry, rz)
 end
 --
 function addObject(name, vertices, edges)
-    objects.shapes[#objects.shapes+1] =
+    objects.shapes[#objects.shapes+1] = 
     {
     name = name,
     vertices = table.deepcopy(vertices),
@@ -47,7 +47,7 @@ function drawShape(objectNumber)
 
             local lineX2 = objectVertices[objectEdges[currentEdge][2]][1]
             local lineY2 = objectVertices[objectEdges[currentEdge][2]][2]
-            if not(math.max(lineX1,lineX2)-math.min(lineX1,lineX2) >= screenWidth*FOV*2) then
+            if not(math.max(lineX1,lineX2)-math.min(lineX1,lineX2) >= screenWidth) then
                 --print('POINT1: '..lineX1..''..lineY1, 'POINT2: '..lineX2..''..lineY2)
                 gfx.drawLine(lineX1,lineY1,lineX2,lineY2)
             end
@@ -75,7 +75,7 @@ function drawShapes()
 
                 local lineX2 = objectVertices[objectEdges[currentEdge][2]][1]
                 local lineY2 = objectVertices[objectEdges[currentEdge][2]][2]
-                if not(math.max(lineX1,lineX2)-math.min(lineX1,lineX2) >= screenWidth*FOV*2) then
+                if not(math.max(lineX1,lineX2)-math.min(lineX1,lineX2) >= screenWidth) then
                     --print('POINT1: '..lineX1..''..lineY1, 'POINT2: '..lineX2..''..lineY2)
                     gfx.drawLine(lineX1,lineY1,lineX2,lineY2)
                 end
@@ -91,7 +91,7 @@ function drawImage(objectNumber)
         if ZCalculation >= 0 then
             local scaleImage = objectImage.image:scaledImage(ZCalculation*objectImage.scale)
             scaleImage:drawCentered(objectImage.point[1],objectImage.point[2])
-            gfx.drawCircleAtPoint(objectImage.point[1], objectImage.point[2], 2)
+            --gfx.drawCircleAtPoint(objectImage.point[1], objectImage.point[2], 2)
         end
     end
     --
@@ -112,23 +112,23 @@ function drawImages()
     end
 end
 
---[[function insertOrdered(array, number)
-    array[#array+1] = number
-    for i = 1, #array do
-		for j = 1, #array - i do
-			if array[j] > array[j + 1] then
-				array[j], array[j + 1] = array[j + 1], array[j]
+function OrderObjects(array)
+    local list = {}
+    local newArray = table.shallowcopy(array)
+    --[[for i = 1, #newArray do
+		for j = 1, #newArray - i do
+			if newArray[j] > newArray[j + 1] then
+				newArray[j], newArray[j + 1] = newArray[j + 1], newArray[j]
 			end
 		end
-	end
-    print('[array]')
-    for i =1, #array do
-        print(array[i])
-    end
-    print('--')
-    for i = 1, #array do
-		if array[i]==number then
-            return i
+	end]]
+    table.sort(newArray)
+    for i = 1, #newArray do
+        for j = 1, #array do
+            if newArray[i]==array[j] then
+                list[#list+1] = j
+            end
         end
 	end
-end]]
+    return list
+end

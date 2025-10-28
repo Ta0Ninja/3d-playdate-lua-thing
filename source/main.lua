@@ -3,18 +3,16 @@ local gfx <const> = pd.graphics
 
 import 'CoreLibs/object'
 import 'CoreLibs/graphics'
-import 'CoreLibs/sprites'
-import 'CoreLibs/timer'
 import 'CoreLibs/crank'
 pd.setCrankSoundsDisabled(true)
 pd.display.setScale(2)
 --lists
 camera = {3,2,20}
 cameraRotation = {0,0,0}
-spareTable = {4, 5,2,1}
 --images
-imagePath = gfx.image.new('images/seal')
-imagewidth, imageheight = imagePath:getSize()
+local sealImage = gfx.image.new('images/seal')
+local sleepySquareImage = gfx.image.new('images/slewppy square pd')
+
 --objetcs =')
 
 objects =
@@ -56,11 +54,23 @@ objects =
         },
     },
     images = {
-        {
-        name = "image ['w']",
-        image = imagePath,
+        --[[{
+        name = "seal ['w']",
+        image = sealImage,
         point = {1,1,6},
         scale = 0.5
+        },]]
+        {
+        name = "seal",
+        image = sealImage,
+        point = {-2,0,6},
+        scale = 0.55
+        },
+        {
+        name = "sleppy sqaure [-w-]",
+        image = sleepySquareImage,
+        point = {-2,0,10},
+        scale = 0.7
         },
     },
 }
@@ -109,12 +119,10 @@ addObject("sloep ;'/",
 )
 --main loop
 function pd.update()
-    crankTicks = pd.getCrankTicks(12)
-    crankPosition = pd.getCrankPosition()
-    rotation = crankPosition/60
+    local crankTicks = pd.getCrankTicks(12)
+    local crankPosition = pd.getCrankPosition()
+    local rotation = crankPosition/60
     cameraRotation[2] = rotation
-    gfx.sprite.update()
-    pd.timer.updateTimers()
     gfx.clear()
     maths()
     --input
@@ -143,11 +151,7 @@ function pd.update()
     if pd.buttonIsPressed(pd.kButtonB) then
         camera[2]-=0.3
     end
-    if pd.buttonJustPressed(pd.kButtonB) then
-        local numberreturned = insertOrdered(spareTable, 1.5)
-        print(numberreturned)
-    end
-    --
+    --[[
     circlePoint += 0.1
     if circlePoint == 360 then
         circlePoint = 0
@@ -157,4 +161,6 @@ function pd.update()
     --objects.images[1].point[1]+=math.cos(circlePoint)
     objects.images[1].point[1]+=math.cos(circlePoint)
     objects.images[1].point[3]+=math.sin(circlePoint)
+    ]]
+    pd.drawFPS()
 end
