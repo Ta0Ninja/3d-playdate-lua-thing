@@ -1,13 +1,17 @@
 local pd <const> = playdate
 local gfx <const> = pd.graphics
-
+local cubeRotation = 0
 function maths()
     --lists
     calculationObjects =table.deepcopy(objects)
     --rotations
-    --[put rotations here]
-    
+    --[put rotations here] 
+    cubeRotation+=0.08
+    for currentVertex =1, #calculationObjects.shapes[1].vertices do
+        rotatePoint(calculationObjects.shapes[1].vertices[currentVertex],0, cubeRotation , 0)
+    end
     --geting relitive camera coordinets
+    shapeList= {}
     for currentObject =1, #objects.shapes do
         local objectVertices <const> = calculationObjects.shapes[currentObject].vertices
         local origObjectVertices <const> = objects.shapes[currentObject].vertices
@@ -23,9 +27,11 @@ function maths()
             end
             objectVertices[currentVertex][1] = screenCenterX+(objectVertices[currentVertex][1]*scale)
             objectVertices[currentVertex][2] = screenCenterY+(objectVertices[currentVertex][2]*scale)
+            
         end
-        
+        shapeList[#shapeList+1] = objectVertices[1][3]
     end
+    --printList(shapeList)
     --image point maths
     imageList= {}
     for currentObject = 1, #objects.images do
@@ -46,10 +52,13 @@ function maths()
 
     end
     --checking z index
-    imageList = OrderObjects(imageList)
+    local placesList, objectTypeList = OrderObjects(imageList, shapeList)
     --drawing lines and dots on screen
-    drawShapes()
-    for i =1, #imageList do
-        drawImage(imageList[i])
+    for currentObject =1, #placesList do
+        if objectTypeList[currentObject] == "shape" then
+            drawShape(placesList[currentObject])
+        elseif objectTypeList[currentObject] == "image" then
+            drawImage(placesList[currentObject])
+        end
     end
 end

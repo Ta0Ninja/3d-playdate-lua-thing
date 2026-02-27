@@ -11,6 +11,7 @@ camera = {3,2,20}
 cameraRotation = {0,0,0}
 --images
 local sealImage = gfx.image.new('images/seal')
+local bugloImage = gfx.image.new('images/buglo')
 local sleepySquareImage = gfx.image.new('images/slewppy square pd')
 
 --objetcs =')
@@ -40,7 +41,7 @@ objects =
         name = "cueb 2 :'O",
         vertices = {    
         {4,4,4},{2, 4, 4},{4, 2,4},{2, 2, 4},
-        {4,4,2},{2, 4, 2},{4, 2,2},{2, 2, 2}
+        {4,4,2},{2, 4, 2},{4, 2,2},{2, 2, 2},
         },
         edges = {
         {1, 2},{1, 3},{1,5},
@@ -54,20 +55,14 @@ objects =
         },
     },
     images = {
-        --[[{
-        name = "seal ['w']",
-        image = sealImage,
-        point = {1,1,6},
-        scale = 0.5
-        },]]
         {
-        name = "seal",
+        name = "seal ['w']",
         image = sealImage,
         point = {-2,0,6},
         scale = 0.55
         },
         {
-        name = "sleppy sqaure [-w-]",
+        name = "sleppy sqaure [-<-]",
         image = sleepySquareImage,
         point = {-2,0,10},
         scale = 0.7
@@ -126,6 +121,7 @@ function pd.update()
     gfx.clear()
     maths()
     --input
+    --print(cameraRotation[2])
     local angleX = (math.cos(cameraRotation[2]))/3
     local angleY = (math.sin(cameraRotation[2]))/3
     if pd.buttonIsPressed(pd.kButtonLeft) then
@@ -151,16 +147,4 @@ function pd.update()
     if pd.buttonIsPressed(pd.kButtonB) then
         camera[2]-=0.3
     end
-    --[[
-    circlePoint += 0.1
-    if circlePoint == 360 then
-        circlePoint = 0
-    elseif circlePoint == -1 then
-        circlePoint = 359
-    end
-    --objects.images[1].point[1]+=math.cos(circlePoint)
-    objects.images[1].point[1]+=math.cos(circlePoint)
-    objects.images[1].point[3]+=math.sin(circlePoint)
-    ]]
-    pd.drawFPS()
 end

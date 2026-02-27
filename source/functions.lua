@@ -19,6 +19,10 @@ function rotatePoint(vertex, rx, ry, rz)
     vertex[3] = z2
 end
 --
+function round(x)
+  return x>=0 and math.floor(x+0.5) or math.ceil(x-0.5)
+end
+--
 function addObject(name, vertices, edges)
     objects.shapes[#objects.shapes+1] = 
     {
@@ -112,23 +116,69 @@ function drawImages()
     end
 end
 
-function OrderObjects(array)
+--[[function OrderObjects(array)
     local list = {}
-    local newArray = table.shallowcopy(array)
-    --[[for i = 1, #newArray do
-		for j = 1, #newArray - i do
-			if newArray[j] > newArray[j + 1] then
-				newArray[j], newArray[j + 1] = newArray[j + 1], newArray[j]
-			end
-		end
-	end]]
-    table.sort(newArray)
-    for i = 1, #newArray do
+    local sortedArray = table.shallowcopy(array)
+    --for i = 1, #sortedArray do
+		--for j = 1, #sortedArray - i do
+			--if sortedArray[j] > sortedArray[j + 1] then
+				--sortedArray[j], sortedArray[j + 1] = sortedArray[j + 1], sortedArray[j]
+			--end
+		--end
+	--end
+    
+    table.sort(sortedArray)
+    for i = 1, #sortedArray do
         for j = 1, #array do
-            if newArray[i]==array[j] then
+            if sortedArray[i]==array[j] then
                 list[#list+1] = j
+                break
             end
         end
 	end
     return list
+end]]
+
+function OrderObjects(array1, array2)
+    local placesList = {}
+    local objectTypeList = {}
+
+    sortedArray = table.shallowcopy(array1)
+    --merge table
+    for currentPlace =1, #array2 do
+        table.insert(sortedArray, #sortedArray+1, array2[currentPlace])
+    end
+    
+    --sort table
+    table.sort(sortedArray)
+    --find
+    for i = 1, #sortedArray do
+        for j = 1, #array1 do
+            if sortedArray[i]==array1[j] then
+                array1[j]-=0.001
+                placesList[#placesList+1] = j
+                objectTypeList[#objectTypeList+1] = "image"
+                break
+            end
+        end
+        for j = 1, #array2 do
+            if sortedArray[i]==array2[j] then
+                array2[j]-=0.001
+                placesList[#placesList+1] = j
+                objectTypeList[#objectTypeList+1] = "shape"
+                break
+            end
+        end
+	end
+    return placesList, objectTypeList
+end
+function printList(array, name)
+    if name == nil then
+        name = ""
+    end
+    print('<--')
+    for currentNumber =1, #array do
+        print(array[currentNumber])
+    end
+    print('--objects in list '..name..': '..#array..'>')
 end
