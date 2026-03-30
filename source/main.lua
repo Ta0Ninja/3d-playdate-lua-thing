@@ -6,6 +6,7 @@ import 'CoreLibs/graphics'
 import 'CoreLibs/crank'
 pd.setCrankSoundsDisabled(true)
 pd.display.setScale(2)
+--pd.setCollectsGarbage(false)
 --lists
 camera = {3,2,20}
 cameraRotation = {0,0,0}

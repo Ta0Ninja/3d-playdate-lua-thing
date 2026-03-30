@@ -181,4 +181,5 @@ function printList(array, name)
         print(array[currentNumber])
     end
     print('--objects in list '..name..': '..#array..'>')
+    
 end
