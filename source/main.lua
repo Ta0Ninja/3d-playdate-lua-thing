@@ -1,5 +1,6 @@
 local pd <const> = playdate
 local gfx <const> = pd.graphics
+local menu = playdate.getSystemMenu()
 
 import 'CoreLibs/object'
 import 'CoreLibs/graphics'
@@ -7,6 +8,8 @@ import 'CoreLibs/crank'
 pd.setCrankSoundsDisabled(true)
 pd.display.setScale(2)
 --pd.setCollectsGarbage(false)
+--settings
+accelerometerMode = false
 --lists
 camera = {3,2,20}
 cameraRotation = {0,0,0}
@@ -113,6 +116,20 @@ addObject("sloep ;'/",
     {5, 6}
     }
 )
+
+if accelerometerMode == true then
+    player = {x = screenCenterX, y = screenCenterY}
+    movementMultiplyer = 0.25
+    tilt = 0.7
+    rotationScalerX = screenCenterX/45
+    rotationScalerY = screenCenterY/30
+    -- turn the accelerometer on
+    pd.startAccelerometer()
+
+    pd.getSystemMenu():addOptionsMenuItem('sensitivity', {'1', '2', '3', '4', '5',}, '4', function(choice)
+        movementMultiplyer = 1/choice
+    end)
+end
 --main loop
 function pd.update()
     local crankTicks = pd.getCrankTicks(12)
@@ -120,6 +137,30 @@ function pd.update()
     local rotation = crankPosition/60
     cameraRotation[2] = rotation
     gfx.clear()
+
+-- read the accelerometer
+    if accelerometerMode == true then
+        tilt_x, tilt_y, tilt_z = pd.readAccelerometer()
+        
+        -- change player position based on x axis tilt
+        player.x += ((((tilt_x * ((screenWidth/2)/movementMultiplyer))+screenCenterX)-player.x))/(2.5/movementMultiplyer)
+        player.y += (((((tilt_y-tilt) * ((screenHeight/2)/movementMultiplyer))+screenCenterY)-player.y))/(2.5/movementMultiplyer)
+        if player.x < 0 then
+            player.x = 0
+        end
+        if player.y < 0 then
+            player.y = 0
+        end
+        if player.x > screenWidth then
+            player.x = screenWidth
+        end
+        if player.y > screenHeight then
+            player.y = screenHeight
+        end
+
+        accelerometerRotationX=-(player.x-screenCenterX)/rotationScalerX
+        accelerometerRotationY=(player.y-screenCenterY)/rotationScalerY
+    end
     maths()
     --input
     --print(cameraRotation[2])

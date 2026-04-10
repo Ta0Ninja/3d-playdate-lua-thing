@@ -20,7 +20,11 @@ function maths()
                 objectVertices[currentVertex][currentAxis] = objectVertices[currentVertex][currentAxis]-camera[currentAxis]
             end
         --camera rotation
-            rotatePoint(objectVertices[currentVertex],-cameraRotation[3],-cameraRotation[2], -cameraRotation[1])
+            if accelerometerMode == true then
+                rotatePoint(objectVertices[currentVertex],-cameraRotation[3]-(accelerometerRotationY/60),-cameraRotation[2]-(accelerometerRotationX/60), -cameraRotation[1])
+            else
+                rotatePoint(objectVertices[currentVertex],-cameraRotation[3],-cameraRotation[2], -cameraRotation[1])
+            end
         --doing the calculations every frame
             for currentAxis = 1, 2 do
                 objectVertices[currentVertex][currentAxis] = ((objectVertices[currentVertex][currentAxis])*FOV)/(objectVertices[currentVertex][3])
@@ -41,7 +45,11 @@ function maths()
             objectImage.point[currentAxis] = objectImage.point[currentAxis]-camera[currentAxis]
         end
         --camera rotation
-        rotatePoint(objectImage.point,-cameraRotation[3],-cameraRotation[2], -cameraRotation[1])
+        if accelerometerMode == true then
+            rotatePoint(objectImage.point,-cameraRotation[3]-(accelerometerRotationY/60),-cameraRotation[2]-(accelerometerRotationX/60), -cameraRotation[1])
+        else
+            rotatePoint(objectImage.point,-cameraRotation[3],-cameraRotation[2], -cameraRotation[1])
+        end
         --doing the calculations every frame
         for currentAxis = 1, 2 do
             objectImage.point[currentAxis] = ((objectImage.point[currentAxis])*FOV)/(objectImage.point[3])

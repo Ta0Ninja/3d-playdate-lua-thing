@@ -1,6 +1,6 @@
 local pd <const> = playdate
 local gfx <const> = pd.graphics
---
+--rotation
 function rotatePoint(vertex, rx, ry, rz)
     local cosX, sinX = math.cos(rx), math.sin(rx)
     local y1 = vertex[2] * cosX - vertex[3] * sinX
@@ -18,11 +18,12 @@ function rotatePoint(vertex, rx, ry, rz)
     vertex[2] = y3
     vertex[3] = z2
 end
---
+--maths operations
 function round(x)
   return x>=0 and math.floor(x+0.5) or math.ceil(x-0.5)
 end
---
+
+--3d operations
 function addObject(name, vertices, edges)
     objects.shapes[#objects.shapes+1] = 
     {
@@ -116,6 +117,8 @@ function drawImages()
     end
 end
 
+--Z index calculation
+
 --[[function OrderObjects(array)
     local list = {}
     local sortedArray = table.shallowcopy(array)
@@ -152,7 +155,7 @@ function OrderObjects(array1, array2)
     --sort table
     table.sort(sortedArray)
     --find
-    for i = 1, #sortedArray do
+    --[[for i = 1, #sortedArray do
         for j = 1, #array1 do
             if sortedArray[i]==array1[j] then
                 array1[j]-=0.001
@@ -161,6 +164,7 @@ function OrderObjects(array1, array2)
                 break
             end
         end
+        
         for j = 1, #array2 do
             if sortedArray[i]==array2[j] then
                 array2[j]-=0.001
@@ -169,9 +173,33 @@ function OrderObjects(array1, array2)
                 break
             end
         end
-	end
+    end]]
+    
+    for i = 1, #sortedArray do
+        local imageIndex = table.indexOfElement(array1, sortedArray[i])
+        --print('found image'..i..':',imageIndex)
+        if imageIndex ~= nil then
+            array1[imageIndex]-=0.001
+            placesList[#placesList+1] = imageIndex
+            objectTypeList[#objectTypeList+1] = "image"
+        end
+
+        local shapeIndex = table.indexOfElement(array2, sortedArray[i])
+        --print('found shape'..i..':',shapeIndex)
+        if shapeIndex ~= nil then
+            array2[shapeIndex]-=0.001
+            placesList[#placesList+1] = shapeIndex
+            objectTypeList[#objectTypeList+1] = "shape"
+        end
+    end
+
+    --printTable(placesList)
+    --printTable(objectTypeList)
+
     return placesList, objectTypeList
 end
+
+--debug function
 function printList(array, name)
     if name == nil then
         name = ""
