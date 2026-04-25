@@ -1,5 +1,6 @@
 local pd <const> = playdate
 local gfx <const> = pd.graphics
+local geo <const> = pd.geometry
 --rotation
 function rotatePoint(vertex, rx, ry, rz)
     local cosX, sinX = math.cos(rx), math.sin(rx)
@@ -29,12 +30,22 @@ function addObject(name, vertices, edges)
     {
     name = name,
     vertices = table.deepcopy(vertices),
-    edges = table.deepcopy(edges)
+    edges = table.deepcopy(edges),
+    faces = {}
     }
 end
+
+function fillPolygonOutlined(polygon)
+    gfx.setPattern({0x55, 0xFF, 0x55, 0xFF, 0x55, 0xFF, 0x55, 0xFF})
+    gfx.fillPolygon(polygon)
+    gfx.setColor(gfx.kColorBlack)
+    gfx.drawPolygon(polygon)
+end
+
 function drawShape(objectNumber)
     local objectVertices <const> = calculationObjects.shapes[objectNumber].vertices
     local objectEdges <const> = calculationObjects.shapes[objectNumber].edges
+    local objectFaces <const> = calculationObjects.shapes[objectNumber].faces
     --drawing dots
     for currentVertex = 1, #objectVertices do
         if (objectVertices[currentVertex][1] <= screenWidth or objectVertices[currentVertex][1] >= 0) or (objectVertices[currentVertex][2] <= screenHeight or objectVertices[currentVertex][2] >= 0) then
@@ -43,35 +54,8 @@ function drawShape(objectNumber)
             end
         end
     end
-
-    --draw lines
-    for currentEdge = 1, #objectEdges do
-        if (objectVertices[objectEdges[currentEdge][1]][3] < 0) then
-            local lineX1 = objectVertices[objectEdges[currentEdge][1]][1]
-            local lineY1 = objectVertices[objectEdges[currentEdge][1]][2]
-
-            local lineX2 = objectVertices[objectEdges[currentEdge][2]][1]
-            local lineY2 = objectVertices[objectEdges[currentEdge][2]][2]
-            if not(math.max(lineX1,lineX2)-math.min(lineX1,lineX2) >= screenWidth) then
-                --print('POINT1: '..lineX1..''..lineY1, 'POINT2: '..lineX2..''..lineY2)
-                gfx.drawLine(lineX1,lineY1,lineX2,lineY2)
-            end
-        end
-    end
-end
-function drawShapes()
-    for currentObject =1, #objects.shapes do
-        local objectVertices <const> = calculationObjects.shapes[currentObject].vertices
-        local objectEdges <const> = calculationObjects.shapes[currentObject].edges
-        --drawing dots
-        for currentVertex = 1, #objectVertices do
-            if (objectVertices[currentVertex][1] <= screenWidth or objectVertices[currentVertex][1] >= 0) or (objectVertices[currentVertex][2] <= screenHeight or objectVertices[currentVertex][2] >= 0) then
-                if objectVertices[currentVertex][3] < 0 then
-                    gfx.fillCircleAtPoint(objectVertices[currentVertex][1],objectVertices[currentVertex][2],2)
-                end
-            end
-        end
-
+    
+    if #objectFaces == 0 then
         --draw lines
         for currentEdge = 1, #objectEdges do
             if (objectVertices[objectEdges[currentEdge][1]][3] < 0) then
@@ -80,15 +64,46 @@ function drawShapes()
 
                 local lineX2 = objectVertices[objectEdges[currentEdge][2]][1]
                 local lineY2 = objectVertices[objectEdges[currentEdge][2]][2]
+
+                local pointX3 = objectVertices[3][1]
+                local pointY3 = objectVertices[3][2]
+
                 if not(math.max(lineX1,lineX2)-math.min(lineX1,lineX2) >= screenWidth) then
                     --print('POINT1: '..lineX1..''..lineY1, 'POINT2: '..lineX2..''..lineY2)
                     gfx.drawLine(lineX1,lineY1,lineX2,lineY2)
+                    --gfx.setColor(gfx.kColorXOR)
+                    --gfx.fillPolygon(geo.polygon.new(lineX1, lineY1, lineX2, lineY2, pointX3, pointY3, lineX1, lineY1))
                 end
             end
         end
+    else
+        --draw faces
+        for currentFace = 1, #objectFaces do
+            if (objectVertices[objectFaces[currentFace][1]][3] < 0) then
+                --points = {}
 
+                --for currentPoint = 1, #objectFaces[currentFace] do
+                local pointX1 = objectVertices[objectFaces[currentFace][1]][1]
+                local pointY1 = objectVertices[objectFaces[currentFace][1]][2]
+
+                local pointX2 = objectVertices[objectFaces[currentFace][2]][1]
+                local pointY2 = objectVertices[objectFaces[currentFace][2]][2]
+
+                local pointX3 = objectVertices[objectFaces[currentFace][3]][1]
+                local pointY3= objectVertices[objectFaces[currentFace][3]][2]
+
+                local pointX4 = objectVertices[objectFaces[currentFace][4]][1]
+                local pointY4= objectVertices[objectFaces[currentFace][4]][2]
+
+                if not(math.max(pointX1,pointX2,pointX3,pointX4)-math.min(pointX1,pointX2,pointX3,pointX4) >= screenWidth) then
+
+                    fillPolygonOutlined(geo.polygon.new(pointX1,pointY1,pointX2,pointY2,pointX3,pointY3,pointX4,pointY4,pointX1,pointY1))
+                end
+            end
+        end
     end
 end
+
 function drawImage(objectNumber)
     local objectImage <const> = calculationObjects.images[objectNumber]
     local ZCalculation = (((objectImage.point[3]+14)/scale)+1)*(FOV/1.75)

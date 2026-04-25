@@ -14,9 +14,9 @@ accelerometerMode = false
 camera = {3,2,20}
 cameraRotation = {0,0,0}
 --images
-local sealImage = gfx.image.new('images/seal')
-local bugloImage = gfx.image.new('images/buglo')
-local sleepySquareImage = gfx.image.new('images/slewppy square pd')
+sealImage = gfx.image.new('images/seal')
+bugloImage = gfx.image.new('images/buglo')
+sleepySquareImage = gfx.image.new('images/slewppy square pd')
 
 --objetcs =')
 
@@ -39,8 +39,18 @@ objects =
         {5, 7},{5, 6},
         {6, 8},
         {7, 8}
+        },
+        faces = {
+        {4, 2, 6, 8},
+        {3, 1, 5, 7},
+        {2, 1, 5, 6},
+        {4, 3, 7, 8},
+        {2, 1, 3, 4},
+        {6, 5, 7, 8},
         }
         },
+        
+        
         {
         name = "cueb 2 :'O",
         vertices = {    
@@ -55,6 +65,14 @@ objects =
         {5, 7},{5, 6},
         {6, 8},
         {7, 8}
+        },
+        faces = {
+        {4, 2, 6, 8},
+        {3, 1, 5, 7},
+        {2, 1, 5, 6},
+        {4, 3, 7, 8},
+        {2, 1, 3, 4},
+        {6, 5, 7, 8},
         }
         },
     },
@@ -116,6 +134,8 @@ addObject("sloep ;'/",
     {5, 6}
     }
 )
+
+--gfx.setColor(gfx.kColorBlack)
 
 if accelerometerMode == true then
     player = {x = screenCenterX, y = screenCenterY}
