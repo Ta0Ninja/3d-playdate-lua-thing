@@ -80,9 +80,7 @@ function drawShape(objectNumber)
         --draw faces
         for currentFace = 1, #objectFaces do
             if (objectVertices[objectFaces[currentFace][1]][3] < 0) then
-                --points = {}
 
-                --for currentPoint = 1, #objectFaces[currentFace] do
                 local pointX1 = objectVertices[objectFaces[currentFace][1]][1]
                 local pointY1 = objectVertices[objectFaces[currentFace][1]][2]
 
@@ -92,12 +90,9 @@ function drawShape(objectNumber)
                 local pointX3 = objectVertices[objectFaces[currentFace][3]][1]
                 local pointY3= objectVertices[objectFaces[currentFace][3]][2]
 
-                local pointX4 = objectVertices[objectFaces[currentFace][4]][1]
-                local pointY4= objectVertices[objectFaces[currentFace][4]][2]
+                if not(math.max(pointX1,pointX2,pointX3)-math.min(pointX1,pointX2,pointX3) >= screenWidth) then
 
-                if not(math.max(pointX1,pointX2,pointX3,pointX4)-math.min(pointX1,pointX2,pointX3,pointX4) >= screenWidth) then
-
-                    fillPolygonOutlined(geo.polygon.new(pointX1,pointY1,pointX2,pointY2,pointX3,pointY3,pointX4,pointY4,pointX1,pointY1))
+                    fillPolygonOutlined(geo.polygon.new(pointX1,pointY1,pointX2,pointY2,pointX3,pointY3,pointX1,pointY1))
                 end
             end
         end
