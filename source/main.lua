@@ -176,7 +176,7 @@ end
 function pd.update()
     local crankTicks = pd.getCrankTicks(12)
     local crankPosition = pd.getCrankPosition()
-    local rotation = crankPosition/60
+    local rotation = math.rad(crankPosition)
     cameraRotation[2] = rotation
     gfx.clear()
 

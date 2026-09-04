@@ -21,7 +21,7 @@ function maths()
             end
         --camera rotation
             if accelerometerMode == true then
-                rotatePoint(objectVertices[currentVertex],-cameraRotation[3]-(accelerometerRotationY/60),-cameraRotation[2]-(accelerometerRotationX/60), -cameraRotation[1])
+                rotatePoint(objectVertices[currentVertex],-cameraRotation[3]-(math.rad(accelerometerRotationY)),-cameraRotation[2]-(math.rad(accelerometerRotationX)), -cameraRotation[1])
             else
                 rotatePoint(objectVertices[currentVertex],-cameraRotation[3],-cameraRotation[2], -cameraRotation[1])
             end
@@ -46,7 +46,7 @@ function maths()
         end
         --camera rotation
         if accelerometerMode == true then
-            rotatePoint(objectImage.point,-cameraRotation[3]-(accelerometerRotationY/60),-cameraRotation[2]-(accelerometerRotationX/60), -cameraRotation[1])
+            rotatePoint(objectImage.point,-cameraRotation[3]-(math.rad(accelerometerRotationY)),-cameraRotation[2]-(math.rad(accelerometerRotationX)), -cameraRotation[1])
         else
             rotatePoint(objectImage.point,-cameraRotation[3],-cameraRotation[2], -cameraRotation[1])
         end
